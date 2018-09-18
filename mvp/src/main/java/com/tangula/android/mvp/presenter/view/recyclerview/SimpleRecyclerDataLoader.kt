@@ -2,17 +2,10 @@ package com.tangula.android.mvp.presenter.view.recyclerview
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
-import android.util.Log
-
 import com.tangula.android.mvp.module.DefaultPaginationModule
 import com.tangula.utils.function.BiConsumer
 import com.tangula.utils.function.Consumer
-
 import java.lang.reflect.ParameterizedType
-import java.util.ArrayList
-
-import android.support.v7.widget.helper.ItemTouchHelper.*
 
 abstract class SimpleRecyclerDataLoader<T, VH : AbstractRecyclerViewItemHolder<T>> protected constructor(content: Context, recycleView: RecyclerView, resId: Int, orientation: OrientationEnum) {
 
@@ -34,7 +27,7 @@ abstract class SimpleRecyclerDataLoader<T, VH : AbstractRecyclerViewItemHolder<T
                 val max = recyclerView.computeVerticalScrollRange() - recyclerView.computeVerticalScrollExtent()
                 if (newState == 0) {
                     if (offset == 0) {
-                        val module = presenter.module
+                        val module = presenter.module?:DefaultPaginationModule()
                         module.pageIndex = 1
                         presenter.refresh()
                     } else if (offset == max) {
