@@ -10,7 +10,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import com.tangula.android.utils.UiThreadUtils
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
@@ -36,7 +35,7 @@ class GifDataFactory {
 
 }
 
-class GifImageView(context: Context, attrs: AttributeSet) : ImageView(context, attrs) {
+open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(context, attrs) {
     /**
      *  gif flag.
      */
@@ -68,9 +67,9 @@ class GifImageView(context: Context, attrs: AttributeSet) : ImageView(context, a
     /**
      * current start time.
      */
-    var startTm = -1L
+    private var startTm = -1L
 
-    var gifDrawingThread:Thread? = null
+    private var gifDrawingThread:Thread? = null
 
     override fun onDraw(canvas: Canvas?) {
         // draw normal

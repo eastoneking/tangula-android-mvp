@@ -30,6 +30,10 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar',"aar"], dir: 'libs')
+
+    implementation "com.tangula.android:commons:0.0.1-SNAPSHOT@aar"
+    implementation "com.tangula.android:http:0.0.1-SNAPSHOT@aar"
+
     implementation "com.android.support:appcompat-v7:$support_version"
     implementation "com.android.support:recyclerview-v7:$support_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -46,7 +50,6 @@ dependencies {
     androidTestImplementation "com.android.support.test:runner:$support_test_version"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version"
 
-    implementation "com.tangula.android:commons:0.0.1-SNAPSHOT"
 }
 
 def GROUP_ID = "com.tangula.android"
