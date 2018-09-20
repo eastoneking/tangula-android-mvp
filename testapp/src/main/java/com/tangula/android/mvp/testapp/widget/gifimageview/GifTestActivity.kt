@@ -9,10 +9,12 @@ import kotlinx.android.synthetic.main.activity_gif_test.*
 class GifTestActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        ApplicationUtils.APP = application  //记录APP对象
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gif_test)
-        ApplicationUtils.APP = application
-        vw_gif_test_image.showImage("https://www.baidu.com/img/bd_logo1.png")
+        vw_gif_test_image.showImage("https://www.baidu.com/img/bd_logo1.png") //显示百度搜索首页中的百度Logo图片.
     }
 
 
