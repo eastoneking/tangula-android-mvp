@@ -4,8 +4,13 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import com.tangula.android.http.ImageHttpUtils
+import android.widget.ImageView
+import com.jakewharton.picasso.OkHttp3Downloader
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
+import com.tangula.android.http.HttpBase
 import com.tangula.android.mvp.R
+import okhttp3.OkHttpClient
 
 /**
  * 用于显示远程图片的ImageView.
@@ -23,6 +28,49 @@ class RemoteImageView(context: Context, attrs: AttributeSet) : GifImageView(cont
          * 默认占位图片.
          */
         var errorPlaceHolderDrawable:Drawable?=null
+
+        /**
+         * 显示图片.
+         */
+        @JvmStatic
+        fun loadImage(context: Context?, view: ImageView, url: String, placeHolder: Drawable?, errorHolder: Drawable?, onBeforeRequest:Runnable?, onSuccess: Runnable?, onFail: Runnable?) {
+            val client = OkHttpClient.Builder()
+                    .addInterceptor { chain ->
+                        onBeforeRequest?.run()
+                        chain.proceed(chain.request())
+                    }
+                    .build()
+
+            val picasso = Picasso.Builder(context ?: view.context)
+                    .downloader(OkHttp3Downloader(client))
+                    .build()
+
+            val req = picasso.load(url)
+            when (placeHolder != null) {
+                true -> {
+                    req.placeholder(placeHolder)
+                }
+                else->{
+                    req.noPlaceholder()
+                }
+            }
+            when (errorHolder != null) {
+                true -> {
+                    req.error(errorHolder)
+                }
+            }
+
+            view.post{
+                req.into(view, object : Callback {
+                    override fun onSuccess() {
+                        onSuccess?.run()
+                    }
+                    override fun onError() {
+                        onFail?.run()
+                    }
+                })
+            }
+        }
 
     }
 
@@ -54,7 +102,10 @@ class RemoteImageView(context: Context, attrs: AttributeSet) : GifImageView(cont
         setBackgroundColor(Color.TRANSPARENT) //设置为透明底色
         gifData = fetchLoadingGifData()
 
-        ImageHttpUtils.loadImage(this.context,this,url,null,fetchErrorPlaceHolder() as Drawable?, null, Runnable{
+        loadImage(this.context,this,url,null,fetchErrorPlaceHolder() as Drawable?,
+                Runnable{
+                    Thread.sleep(5000)
+                }, Runnable{
             isGif=false
         }, Runnable {
             isGif=false
