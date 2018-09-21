@@ -1,4 +1,4 @@
-package com.tangula.android.mvp.activity.widget
+package com.tangula.android.mvp.widget
 
 import android.content.Context
 import android.graphics.Color
@@ -30,7 +30,7 @@ class RemoteImageView(context: Context, attrs: AttributeSet) : GifImageView(cont
      * 获取加载中GIF图片.
      */
     fun fetchLoadingGifData():ByteArray{
-        if(loadingGifData==null){
+        if(loadingGifData ==null){
             loadingGifData = GifDataFactory.loadGif(this.context, R.drawable.place_holder_loading)
         }
         return loadingGifData!!
@@ -40,7 +40,7 @@ class RemoteImageView(context: Context, attrs: AttributeSet) : GifImageView(cont
      * 获取默认占位图片.
      */
     fun fetchErrorPlaceHolder():Drawable{
-        if(errorPlaceHolderDrawable==null){
+        if(errorPlaceHolderDrawable ==null){
             errorPlaceHolderDrawable = this.context.getDrawable(R.drawable.place_holder_no_pic)
         }
         return errorPlaceHolderDrawable!!
