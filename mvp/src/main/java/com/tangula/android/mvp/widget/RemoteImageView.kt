@@ -50,9 +50,11 @@ class RemoteImageView(context: Context, attrs: AttributeSet) : GifImageView(cont
      * 显示远程图片.
      */
     fun showImage(url:String){
+
         setBackgroundColor(Color.TRANSPARENT) //设置为透明底色
         gifData = fetchLoadingGifData()
-        ImageHttpUtils.loadImage(this,url,null,fetchErrorPlaceHolder(), Runnable{
+
+        ImageHttpUtils.loadImage(this.context,this,url,null,fetchErrorPlaceHolder() as Drawable?, null, Runnable{
             isGif=false
         }, Runnable {
             isGif=false

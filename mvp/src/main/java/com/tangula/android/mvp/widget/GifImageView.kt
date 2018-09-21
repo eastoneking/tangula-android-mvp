@@ -142,7 +142,7 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
 
     private fun startNewGifMovieRefreshThread() {
         if (gifDrawingThread == null) {
-            synchronized(this) {
+            synchronized(this.gifData!!) {
                 if (gifDrawingThread == null) {
                     gifDrawingThread = Thread {
                         while (true) {
@@ -166,6 +166,7 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
                         }
 
                     }.also {
+                        it.name="__TGL_GIF_REFRESH_THREAD"
                         it.isDaemon=true
                         it.start()
                     }
@@ -251,7 +252,7 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
 
     override fun setImageDrawable(drawable: Drawable?) {
         super.setImageDrawable(drawable)
-        isGif=false
+        //isGif=false
     }
 
     override fun setImageIcon(icon: Icon?) {
