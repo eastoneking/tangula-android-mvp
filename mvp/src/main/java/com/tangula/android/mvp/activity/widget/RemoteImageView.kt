@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import com.tangula.android.http.ImageHttpUtils
 import com.tangula.android.mvp.R
-import com.tangula.android.utils.ApplicationUtils
 
 /**
  * 用于显示远程图片的ImageView.
@@ -26,7 +25,6 @@ class RemoteImageView(context: Context, attrs: AttributeSet) : GifImageView(cont
         var errorPlaceHolderDrawable:Drawable?=null
 
     }
-
 
     /**
      * 获取加载中GIF图片.
