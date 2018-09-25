@@ -14,8 +14,8 @@ class GifTestActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gif_test)
-        vw_gif_test_image.setImageResource(R.drawable.loading2)
-        //vw_gif_test_image.showImage("https://www.baidu.com/img/bd_logo1.png") //显示百度搜索首页中的百度Logo图片.
+        //vw_gif_test_image.setImageResource(R.drawable.loading2)
+        vw_gif_test_image.showImage("https://www.baidu.com/img/bd_logo1.png") //显示百度搜索首页中的百度Logo图片.
     }
 
 

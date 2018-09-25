@@ -104,7 +104,6 @@ class RemoteImageView(context: Context, attrs: AttributeSet) : GifImageView(cont
 
         loadImage(this.context,this,url,null,fetchErrorPlaceHolder() as Drawable?,
                 Runnable{
-                    Thread.sleep(5000)
                 }, Runnable{
             isGif=false
         }, Runnable {

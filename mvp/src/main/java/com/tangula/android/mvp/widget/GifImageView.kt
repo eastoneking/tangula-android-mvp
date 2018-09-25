@@ -69,6 +69,12 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
      */
     private var gifDrawingThread: Thread? = null
 
+    init {
+        if(Build.VERSION.SDK_INT<26){
+            setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+        }
+    }
+
     override fun onDraw(canvas: Canvas?) {
         when (isGif) {
             true -> {
@@ -92,9 +98,11 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
         if (movie != null) {
             canvas?.save(Canvas.ALL_SAVE_FLAG) //保存变换矩阵
             canvas?.scale(gifScaleX, gifScaleY)
+            updateMovieTime()
             movie?.draw(canvas, 0f, 0f)
             canvas?.restore() //恢复变换矩阵
         } else {
+            Log.v("console", "draw 5")
             super.draw(canvas)
         }
     }
