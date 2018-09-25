@@ -127,7 +127,17 @@ class RemoteImageView(context: Context, attrs: AttributeSet) : GifImageView(cont
      */
     fun showImage(image: RemoteImage){
         setBackgroundColor(Color.TRANSPARENT) //设置为透明底色
-        loadImage(this.context,this,image.url,image.placeHolder,image.errorHolder,
+        var ph: Any? = null
+        when(image.placeHolder){
+            is ByteArray->{
+                gifData = image.placeHolder as ByteArray
+            }
+            else ->{
+                ph = image.placeHolder
+            }
+        }
+
+        loadImage(this.context,this,image.url,ph,image.errorHolder,
                 Runnable{
                 }, Runnable{
             isGif=false
