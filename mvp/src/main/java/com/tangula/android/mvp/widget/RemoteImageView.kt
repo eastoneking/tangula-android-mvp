@@ -8,9 +8,14 @@ import android.widget.ImageView
 import com.jakewharton.picasso.OkHttp3Downloader
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
-import com.tangula.android.http.HttpBase
 import com.tangula.android.mvp.R
 import okhttp3.OkHttpClient
+
+
+/**
+ * 远程Image的模型.
+ */
+data class RemoteImage(var url:String, var placeHolder:Any?, var errorHolder:Any?)
 
 /**
  * 用于显示远程图片的ImageView.
@@ -33,7 +38,7 @@ class RemoteImageView(context: Context, attrs: AttributeSet) : GifImageView(cont
          * 显示图片.
          */
         @JvmStatic
-        fun loadImage(context: Context?, view: ImageView, url: String, placeHolder: Drawable?, errorHolder: Drawable?, onBeforeRequest:Runnable?, onSuccess: Runnable?, onFail: Runnable?) {
+        private fun loadImage(context: Context?, view: ImageView, url: String, placeHolder: Any?, errorHolder: Any?, onBeforeRequest:Runnable?, onSuccess: Runnable?, onFail: Runnable?) {
             val client = OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         onBeforeRequest?.run()
@@ -46,16 +51,22 @@ class RemoteImageView(context: Context, attrs: AttributeSet) : GifImageView(cont
                     .build()
 
             val req = picasso.load(url)
-            when (placeHolder != null) {
-                true -> {
+            when (placeHolder) {
+                is Int -> {
                     req.placeholder(placeHolder)
                 }
-                else->{
+                is Drawable ->{
+                    req.placeholder(placeHolder)
+                }
+                else ->{
                     req.noPlaceholder()
                 }
             }
-            when (errorHolder != null) {
-                true -> {
+            when (errorHolder) {
+                is Int -> {
+                    req.error(errorHolder)
+                }
+                is Drawable -> {
                     req.error(errorHolder)
                 }
             }
@@ -103,6 +114,20 @@ class RemoteImageView(context: Context, attrs: AttributeSet) : GifImageView(cont
         gifData = fetchLoadingGifData()
 
         loadImage(this.context,this,url,null,fetchErrorPlaceHolder() as Drawable?,
+                Runnable{
+                }, Runnable{
+            isGif=false
+        }, Runnable {
+            isGif=false
+        })
+    }
+
+    /**
+     * 显示远程图片，自定义加载图片和错误图片.
+     */
+    fun showImage(image: RemoteImage){
+        setBackgroundColor(Color.TRANSPARENT) //设置为透明底色
+        loadImage(this.context,this,image.url,image.placeHolder,image.errorHolder,
                 Runnable{
                 }, Runnable{
             isGif=false

@@ -9,11 +9,38 @@ import android.os.Build
 import android.support.annotation.DrawableRes
 import android.support.annotation.RawRes
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.nio.charset.Charset
+
+/**
+ * Gif数据工厂.
+ */
+class GifDataFactory {
+    companion object {
+        @JvmStatic
+        fun loadGif(input: InputStream): ByteArray {
+            val buf = ByteArrayOutputStream()
+            input.copyTo(buf, 10240)
+            return buf.toByteArray()
+        }
+
+        /**
+         * 根据资源id加载Gif图片数据.
+         * @param context 读取资源的上下文对象.
+         * @param resId 资源Id.
+         * @return Gif图片文件内容.
+         */
+        @JvmStatic
+        fun loadGif(context: Context, resId: Int): ByteArray {
+            return context.resources.openRawResource(resId).use { loadGif(it) }
+        }
+    }
+
+}
 
 /**
  * Gif图片组件.
@@ -41,6 +68,12 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
     var gifScaleY = 1.0f
 
     /**
+     * gif刷新帧间隔时间.
+     */
+    var gifFrameDuration = 33L
+
+
+    /**
      * gif data object.
      */
     var gifData: ByteArray? = null
@@ -51,7 +84,17 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
                 gifWidth = pic.width
                 gifHeight = pic.height
             }
+
             isGif = value != null
+
+
+            /*
+             * android版本小于26时，ImageView如果是硬件加速，无法刷新
+             * Movie的动画效果，必须设置为软加速的方式才能正常显示.
+             */
+            if(Build.VERSION.SDK_INT<26){
+                setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+            }
         }
 
     /**
@@ -69,17 +112,10 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
      */
     private var gifDrawingThread: Thread? = null
 
-    init {
-        if(Build.VERSION.SDK_INT<26){
-            setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-        }
-    }
-
     override fun onDraw(canvas: Canvas?) {
         when (isGif) {
             true -> {
                 if (movie == null) {
-
                     //在后台线程中刷新GIF当前帧
                     //否则会报 I/Choreographer: Skipped 78 frames!  The application may be doing too much work on its main thread. -- warn-1
                     startNewGifMovieRefreshThread()
@@ -102,7 +138,6 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
             movie?.draw(canvas, 0f, 0f)
             canvas?.restore() //恢复变换矩阵
         } else {
-            Log.v("console", "draw 5")
             super.draw(canvas)
         }
     }
@@ -142,7 +177,7 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
                             postInvalidate()
 
                             try {
-                                Thread.sleep(33)
+                                Thread.sleep(gifFrameDuration)
                             } catch (e: Throwable) {
                                 //skip exception
                             }
@@ -169,7 +204,7 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
     private fun updateMovieTime() {
         val movie_duration = movie?.duration() ?: 1
 
-        if (movie_duration < 34) {
+        if (movie_duration < gifFrameDuration) {
             //按照一秒30帧计算，一帧最少33.3...毫秒，如果低于这个间隔，人眼无法识别
             //所以这个时候就不耗费时间算第几帧了，直接显示第一帧的图片
             movie?.setTime(0)
