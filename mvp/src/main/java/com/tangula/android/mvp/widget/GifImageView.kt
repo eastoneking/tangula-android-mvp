@@ -137,8 +137,6 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
             updateMovieTime()
             movie?.draw(canvas, 0f, 0f)
             canvas?.restore() //恢复变换矩阵
-        } else {
-            super.draw(canvas)
         }
     }
 

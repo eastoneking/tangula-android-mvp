@@ -1,9 +1,15 @@
 package com.tangula.android.mvp.widget
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.os.Build
+import android.os.Build.VERSION
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
+import android.support.v7.widget.DrawableUtils
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.widget.ImageView
 import com.jakewharton.picasso.OkHttp3Downloader
 import com.squareup.picasso.Callback
@@ -96,12 +102,17 @@ class RemoteImageView(context: Context, attrs: AttributeSet) : GifImageView(cont
         return loadingGifData!!
     }
 
-    /**
+    @SuppressLint("ResourceType")
+            /**
      * 获取默认占位图片.
      */
     fun fetchErrorPlaceHolder():Drawable{
         if(errorPlaceHolderDrawable ==null){
-            errorPlaceHolderDrawable = this.context.getDrawable(R.drawable.place_holder_no_pic)
+            if (VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                errorPlaceHolderDrawable = this.context.getDrawable(R.drawable.place_holder_no_pic)
+            }else {
+                errorPlaceHolderDrawable = Drawable.createFromStream(this.context.resources.openRawResource(R.drawable.place_holder_no_pic), "no_pic")
+            }
         }
         return errorPlaceHolderDrawable!!
     }

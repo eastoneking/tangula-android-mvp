@@ -222,9 +222,6 @@ protected constructor(
                 }
             }
 
-
-            res.refresh()
-
             return res
 
         }

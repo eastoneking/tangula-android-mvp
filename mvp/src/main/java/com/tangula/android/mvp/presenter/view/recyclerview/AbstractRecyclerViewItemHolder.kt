@@ -12,17 +12,4 @@ abstract class AbstractRecyclerViewItemHolder<T>(itemView: View) : RecyclerView.
 
     abstract fun bindData(item: T)
 
-    companion object {
-        @JvmStatic
-        fun findActivity(vw: View): AppCompatActivity {
-            var p = vw.parent
-            while (true) {
-                if (p is AppCompatActivity) {
-                    return p
-                }
-                p = p.parent
-            }
-        }
-    }
-
 }

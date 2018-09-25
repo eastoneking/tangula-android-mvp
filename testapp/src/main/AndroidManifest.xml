@@ -12,9 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".widget.gifimageview.GifTestActivity">
+        </activity>
+        <activity android:name=".presenter.view.recyclerview.RecyclerViewTestActivity"></activity>
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
