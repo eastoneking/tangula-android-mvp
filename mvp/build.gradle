@@ -7,7 +7,7 @@ archivesBaseName = 'mvp'
 version = '0.0.1-SNAPSHOT'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 27
 
     defaultConfig {
         minSdkVersion 21
@@ -26,22 +26,27 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+configurations.all {
+    // Don't cache changing modules at all.
+    resolutionStrategy.cacheChangingModulesFor 1, 'seconds'
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar',"aar"], dir: 'libs')
-
-    implementation "com.tangula.android:commons:0.0.1-SNAPSHOT@aar"
-    implementation "com.tangula.android:http:0.0.1-SNAPSHOT@aar"
-
-
+    implementation fileTree(include: ['*.jar', 'aar'], dir: 'libs')
+    implementation 'com.tangula.android:commons:0.0.1-SNAPSHOT@aar'
+    implementation 'com.tangula.android:http:0.0.1-SNAPSHOT@aar'
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     // https://mvnrepository.com/artifact/com.squareup.picasso/picasso
     implementation "com.squareup.picasso:picasso:$picasso_version"
     // https://mvnrepository.com/artifact/com.jakewharton.picasso/picasso2-okhttp3-downloader
-    implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0"
-
+    implementation 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
     implementation "com.android.support:appcompat-v7:$support_version"
     implementation "com.android.support:recyclerview-v7:$support_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -52,12 +57,10 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation 'org.apache.commons:commons-lang3:3.7'
     // https://mvnrepository.com/artifact/commons-codec/commons-codec
-    implementation group: 'commons-codec', name: 'commons-codec', version: '1.11'
-
+    implementation 'commons-codec:commons-codec:1.11'
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "com.android.support.test:runner:$support_test_version"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version"
-
 }
 
 def GROUP_ID = "com.tangula.android"
