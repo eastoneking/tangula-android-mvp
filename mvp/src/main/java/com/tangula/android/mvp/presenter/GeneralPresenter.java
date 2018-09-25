@@ -3,6 +3,7 @@ package com.tangula.android.mvp.presenter;
 import android.annotation.SuppressLint;
 
 import com.tangula.android.mvp.module.Module;
+import com.tangula.android.utils.ApplicationUtils;
 import com.tangula.android.utils.UiThreadUtils;
 import com.tangula.utils.function.Consumer;
 import com.tangula.utils.function.Supplier;
