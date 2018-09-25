@@ -9,13 +9,14 @@ import com.jakewharton.picasso.OkHttp3Downloader
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.tangula.android.mvp.R
+import com.tangula.android.mvp.module.Module
 import okhttp3.OkHttpClient
 
 
 /**
  * 远程Image的模型.
  */
-data class RemoteImage(var url:String, var placeHolder:Any?, var errorHolder:Any?)
+data class RemoteImage(var url:String, var placeHolder:Any?, var errorHolder:Any?) : Module
 
 /**
  * 用于显示远程图片的ImageView.

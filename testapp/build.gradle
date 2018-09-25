@@ -24,6 +24,11 @@ android {
 
 }
 
+configurations.all {
+    // Don't cache changing modules at all.
+    resolutionStrategy.cacheChangingModulesFor 1, 'seconds'
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar', "*.aar"], dir: 'libs')
 
