@@ -170,10 +170,6 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
 
                             updateMovieTime()
 
-                            //post{
-                            //    invalidate()
-                            //}
-
                             postInvalidate()
 
                             try {
