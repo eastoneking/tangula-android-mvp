@@ -11,7 +11,8 @@ android {
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 23
+        //noinspection OldTargetApi
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
 
@@ -27,8 +28,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -41,12 +42,14 @@ dependencies {
     implementation fileTree(include: ['*.jar', 'aar'], dir: 'libs')
     implementation 'com.tangula.android:commons:0.0.1-SNAPSHOT@aar'
     implementation 'com.tangula.android:http:0.0.1-SNAPSHOT@aar'
+
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     // https://mvnrepository.com/artifact/com.squareup.picasso/picasso
     implementation "com.squareup.picasso:picasso:$picasso_version"
     // https://mvnrepository.com/artifact/com.jakewharton.picasso/picasso2-okhttp3-downloader
     implementation 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
+
     implementation "com.android.support:appcompat-v7:$support_version"
     implementation "com.android.support:recyclerview-v7:$support_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
