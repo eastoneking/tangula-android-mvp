@@ -102,7 +102,13 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
                     module.items = mutableListOf()
                 }
 
-                val loadingLimit = if(module.items.size>3) max/module.items.size*(module.items.size-2) else max
+                var loadingLimit: Int = max;
+
+                when{
+                    max<300-> loadingLimit = Math.ceil(max*0.2).toInt()
+                    max<50000-> loadingLimit = Math.ceil(max*0.8).toInt()
+                    module.items.size>3 -> loadingLimit = max/module.items.size*(module.items.size-2)
+                }
 
                 //calculate the max value of the data.
                 //when total is 0 -> max page number is 1
