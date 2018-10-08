@@ -2,7 +2,10 @@ package com.tangula.android.mvp.presenter.view.recyclerview
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import com.tangula.android.mvp.module.DefaultPaginationModule
+import com.tangula.android.utils.UiThreadUtils
+import com.tangula.utils.JsonUtils
 import com.tangula.utils.function.BiConsumer
 import com.tangula.utils.function.Consumer
 import java.lang.reflect.ParameterizedType
@@ -58,11 +61,12 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
         REFRESH
     }
 
+    private var loading = false
+
     /**
      * 模型数据的填充方式.
      */
     private var moduleDataFillType: ResFillTypeEnum = ResFillTypeEnum.REFRESH
-
 
     init {
         /*
@@ -89,6 +93,8 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
                 val offset = recyclerView!!.computeVerticalScrollOffset()
                 val max = recyclerView.computeVerticalScrollRange() - recyclerView.computeVerticalScrollExtent()
 
+                val loading_limit = max/presenter.module.items.size*(presenter.module.items.size-2)
+
                 var module = presenter.module
 
                 if (module == null) {
@@ -112,28 +118,24 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
                     //offset is the position of scrolling.
                     if (offset == 0) {
                         //drop from the begining.
-                        //TODO check, maybe a wrong.
                         module.pageIndex = 1
                         moduleDataFillType = ResFillTypeEnum.REFRESH
                         presenter.refresh()
-                    } else if (offset == max) {
+                    } else if (offset >= loading_limit && !loading) {
                         //scrolling to the end.
                         var page_index = module.pageIndex + 1
-
+                        Log.v("console", "max: page_index=$page_index max_page_number=$max_page_number")
                         if (page_index <= max_page_number) {
                             module.pageIndex = page_index
                             moduleDataFillType = ResFillTypeEnum.APPENDING
                             presenter.refresh()
                         }
-                        //TODO 更多的最后一页
                     }
                 }
 
             }
 
         })
-
-
 
         @Suppress("UNCHECKED_CAST")
         when (orientation) {
@@ -173,21 +175,55 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
      * This property is a function.
      */
     var loadDataAndFillRes: ((DefaultPaginationModule<T>?, Consumer<DefaultPaginationModule<T>>) -> Unit)? = { cm: DefaultPaginationModule<T>?, cb: Consumer<DefaultPaginationModule<T>> ->
+        updateLoadingStatus(true)
+        var module = this.presenter.module
+
         when (this.moduleDataFillType) {
             ResFillTypeEnum.REFRESH -> {
-                loadData(cm, cb)
+                loadData(cm, Consumer { newModule ->
+                    if (module == null) {
+                        module = DefaultPaginationModule()
+                        module.items = mutableListOf()
+                        presenter.updateModule(module)
+                    }
+                    module.items.clear()
+                    module.items.addAll(newModule.items)
+                    module.pageIndex = newModule.pageIndex
+                    module.pageSize = newModule.pageSize
+                    module.total = newModule.total
+
+                    UiThreadUtils.runInUiThread {
+                        this.presenter.adapter.notifyDataSetChanged()
+                        cb.accept(module)
+                    }
+
+                })// by default, argument cb is defined in GeneralPresetner::refresh.
             }
             ResFillTypeEnum.APPENDING -> {
-                val items = mutableListOf<T>().apply {
-                    this.addAll(cm?.items ?: listOf())
-                }
-                loadData(cm, Consumer { it ->
-                    it.items = items.apply { addAll(it.items) }
-                    cb.accept(it)
+
+                loadData(module, Consumer { newModule ->
+                    val begin = module.items.size
+
+                    newModule.items.forEach { cur ->
+                        module.items.add(cur)
+                    }
+
+                    UiThreadUtils.runInUiThread {
+                        this.presenter.adapter.notifyItemRangeInserted(begin, newModule.items.size)
+                        cb.accept(module)
+                    }
+
                 })
+
             }
         }
 
+    }
+
+    private fun updateLoadingStatus(value:Boolean){
+        synchronized(this){
+            loading = value
+        }
     }
 
 
@@ -199,6 +235,8 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
     /**
      * How to update the pagination infomation.
      */
-    protected abstract fun refreshPagination(module: DefaultPaginationModule<T>?)
+    protected open fun refreshPagination(module: DefaultPaginationModule<T>?){
+        updateLoadingStatus(false)
+    }
 
 }

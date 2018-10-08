@@ -17,8 +17,6 @@ import com.tangula.utils.function.Function
 import com.tangula.utils.function.Supplier
 import org.jetbrains.annotations.NotNull
 
-import java.lang.reflect.InvocationTargetException
-
 /**
  * 抽象的RecyclerViewPresenter.
  *
@@ -92,6 +90,10 @@ protected constructor(private val orientation: Int,
         this.viewHolder.view.adapter = this.adapter
     }
 
+    public fun updateModule(module:DefaultPaginationModule<T>){
+        super.setModule(module)
+    }
+
 
     /**
      * 设置RecyclerView的布局.
@@ -119,6 +121,13 @@ protected constructor(private val orientation: Int,
 
     companion object {
 
+        /**
+         * The factory which create the data item's view holder.
+         * @paramp[view] The item view object.
+         * @param[clazz] The view holder type.
+         *
+         * The view holder must defined a constructor with only one parameter which's type is [View].
+         */
         val selfRecyclerVhFactory =  { view:View, clazz:Class<Any> ->
             var res: AbstractRecyclerViewItemHolder<Any>? = null
             for (cs in clazz.constructors) {
@@ -130,9 +139,8 @@ protected constructor(private val orientation: Int,
                             @Suppress("UNCHECKED_CAST")
                             res = cs.newInstance(view) as AbstractRecyclerViewItemHolder<Any>
                         } catch (e: Exception) {
-                            Log.e("console", "EXLOG00001:"+e.localizedMessage, e)
+                            Log.e("console", "EX_ARVP00001:"+e.localizedMessage, e)
                         }
-
                         break
                     }
                 }
@@ -214,6 +222,7 @@ protected constructor(private val orientation: Int,
             }
             val res = object : AbstractRecyclerViewPresenter<T, RecyclerViewHolder, AbstractRecyclerViewItemHolder<T>>(orientation, vhf, itemVwFac, facItemHolder, BiConsumer { ivh, t -> ivh.bindData(t) }) {
                 override fun loadModule(callbackLoadResultHandler: Consumer<DefaultPaginationModule<T>>) {
+                    Log.v("console", "module hash code:"+module?.hashCode())
                     funcLoadData?.accept(module, callbackLoadResultHandler)
                 }
 

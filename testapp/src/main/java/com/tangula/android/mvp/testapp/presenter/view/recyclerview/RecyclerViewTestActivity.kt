@@ -4,7 +4,6 @@ import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.tangula.android.mvp.module.DefaultPaginationModule
@@ -12,7 +11,6 @@ import com.tangula.android.mvp.module.Module
 import com.tangula.android.mvp.presenter.view.recyclerview.AbstractRecyclerViewItemHolder
 import com.tangula.android.mvp.presenter.view.recyclerview.SimpleRecyclerDataLoader
 import com.tangula.android.mvp.testapp.R
-import com.tangula.utils.JsonUtils
 import com.tangula.utils.function.Consumer
 import kotlinx.android.synthetic.main.activity_recycler_view_test.*
 
@@ -44,21 +42,18 @@ class TestRdl(ctx: Context, rvw: RecyclerView, resId: Int, ori: OrientationEnum)
 
         when (mdl.pageIndex) {
             1 -> {
-                mdl.items = listOf(TestRvm("A"), TestRvm("B"), TestRvm("C"))
+                mdl.items = mutableListOf(TestRvm("A"), TestRvm("B"), TestRvm("C"))
             }
             2 -> {
-                mdl.items = listOf(TestRvm("D"), TestRvm("E"), TestRvm("F"))
+                mdl.items = mutableListOf(TestRvm("D"), TestRvm("E"), TestRvm("F"))
             }
             else -> {
-                mdl.items = listOf(TestRvm("G"), TestRvm("I"))
+                mdl.items = mutableListOf(TestRvm("G"), TestRvm("I"))
             }
         }
-        Log.i("console", "module:"+JsonUtils.toJson(mdl))
-        cb?.accept(mdl)
 
-    }
+        cb.accept(mdl)
 
-    override fun refreshPagination(module: DefaultPaginationModule<TestRvm>?) {
     }
 
     fun refresh(){
@@ -72,7 +67,6 @@ class RecyclerViewTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recycler_view_test)
-        Log.e("test", vw_act_recycler_view_test_recycler.toString())
         TestRdl(this, vw_act_recycler_view_test_recycler, R.layout.item_recycler_view_test, SimpleRecyclerDataLoader.OrientationEnum.VERTICAL).refresh()
     }
 
