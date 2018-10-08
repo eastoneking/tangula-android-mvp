@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import com.tangula.android.mvp.module.DefaultPaginationModule
 import com.tangula.android.utils.UiThreadUtils
-import com.tangula.utils.JsonUtils
 import com.tangula.utils.function.BiConsumer
 import com.tangula.utils.function.Consumer
 import java.lang.reflect.ParameterizedType
@@ -93,7 +92,7 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
                 val offset = recyclerView!!.computeVerticalScrollOffset()
                 val max = recyclerView.computeVerticalScrollRange() - recyclerView.computeVerticalScrollExtent()
 
-                val loading_limit = max/presenter.module.items.size*(presenter.module.items.size-2)
+                val loadingLimit = max/presenter.module.items.size*(presenter.module.items.size-2)
 
                 var module = presenter.module
 
@@ -107,7 +106,7 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
                 //calculate the max value of the data.
                 //when total is 0 -> max page number is 1
                 //else max page number is total/pageSize, and plus 1 when the total mod pageSize is not zero.
-                val max_page_number = module.total / module.pageSize + (if (module.total % module.pageSize > 0) 1 else 0) + (if (module.total == 0) 1 else 0)
+                val maxPageNumber = module.total / module.pageSize + (if (module.total % module.pageSize > 0) 1 else 0) + (if (module.total == 0) 1 else 0)
 
 
                 if (newState == 0) {
@@ -121,12 +120,12 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
                         module.pageIndex = 1
                         moduleDataFillType = ResFillTypeEnum.REFRESH
                         presenter.refresh()
-                    } else if (offset >= loading_limit && !loading) {
+                    } else if (offset >= loadingLimit && !loading) {
                         //scrolling to the end.
-                        var page_index = module.pageIndex + 1
-                        Log.v("console", "max: page_index=$page_index max_page_number=$max_page_number")
-                        if (page_index <= max_page_number) {
-                            module.pageIndex = page_index
+                        val pageIndex = module.pageIndex + 1
+                        Log.v("console", "max: page_index=$pageIndex max_page_number=$maxPageNumber")
+                        if (pageIndex <= maxPageNumber) {
+                            module.pageIndex = pageIndex
                             moduleDataFillType = ResFillTypeEnum.APPENDING
                             presenter.refresh()
                         }

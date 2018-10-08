@@ -33,14 +33,14 @@ abstract class AbstractRecyclerViewPresenter<T, VH : RecyclerViewHolder, IVH : R
 /**
  * 构造函数.
  *
- * @param  orientation  方向.
+ * @param[orientation]  方向.
  * [LinearLayoutManager.VERTICAL] or [LinearLayoutManager.HORIZONTAL]
  * see LinearLayoutManager.VERTICAL
- * @param vhFac               Present的ViewHodler的工厂方法.
- * @param recyclerItemViewFac 列表中每条记录对应的视图的工厂方法.
+ * @param[vhFac]               Present的ViewHodler的工厂方法.
+ * @param[itemViewFac] 列表中每条记录对应的视图的工厂方法.
  * 一般从layout中加载一个布局.
- * @param recyclerVhFac       RecyclerView的ViewHolder工厂方法.
- * @param itemBindFunc        每条记录的绑定处理函数.
+ * @param[recyclerVhFac]       RecyclerView的ViewHolder工厂方法.
+ * @param[itemBindFunc]        每条记录的绑定处理函数.
  */
 protected constructor(private val orientation: Int,
                       private val vhFac: Supplier<VH>,
@@ -90,7 +90,7 @@ protected constructor(private val orientation: Int,
         this.viewHolder.view.adapter = this.adapter
     }
 
-    public fun updateModule(module:DefaultPaginationModule<T>){
+    fun updateModule(module:DefaultPaginationModule<T>){
         super.setModule(module)
     }
 
@@ -122,9 +122,7 @@ protected constructor(private val orientation: Int,
     companion object {
 
         /**
-         * The factory which create the data item's view holder.
-         * @paramp[view] The item view object.
-         * @param[clazz] The view holder type.
+         * The call back factory which create the data item's view holder.
          *
          * The view holder must defined a constructor with only one parameter which's type is [View].
          */
