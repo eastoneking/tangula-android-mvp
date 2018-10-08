@@ -60,6 +60,10 @@ class TestRdl(ctx: Context, rvw: RecyclerView, resId: Int, ori: OrientationEnum)
 
     override fun refreshPagination(module: DefaultPaginationModule<TestRvm>?) {
     }
+
+    fun refresh(){
+        this.presenter.refresh()
+    }
 }
 
 
@@ -68,8 +72,8 @@ class RecyclerViewTestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recycler_view_test)
-
-        TestRdl(this, vw_act_recycler_view_test_recycler, R.layout.item_recycler_view_test, SimpleRecyclerDataLoader.OrientationEnum.VERTICAL)
+        Log.e("test", vw_act_recycler_view_test_recycler.toString())
+        TestRdl(this, vw_act_recycler_view_test_recycler, R.layout.item_recycler_view_test, SimpleRecyclerDataLoader.OrientationEnum.VERTICAL).refresh()
     }
 
 }
