@@ -92,8 +92,6 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
                 val offset = recyclerView!!.computeVerticalScrollOffset()
                 val max = recyclerView.computeVerticalScrollRange() - recyclerView.computeVerticalScrollExtent()
 
-                val loadingLimit = max/presenter.module.items.size*(presenter.module.items.size-2)
-
                 var module = presenter.module
 
                 if (module == null) {
@@ -101,7 +99,10 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
                     module.pageIndex = 1
                     module.pageSize = 10
                     module.total = 0
+                    module.items = mutableListOf()
                 }
+
+                val loadingLimit = if(module.items.size>3) max/module.items.size*(module.items.size-2) else max
 
                 //calculate the max value of the data.
                 //when total is 0 -> max page number is 1
