@@ -57,12 +57,17 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
         /**
          * 丢弃当前结果，并把新获得的结果当做模型的数据.
          */
-        REFRESH
+        REFRESH,
+        /**
+         * 新数据在最前的模式.
+         */
+        INSERT_BEFORE
     }
 
     private var loading = false
 
     /**
+     * The module of data filling type.
      * 模型数据的填充方式.
      */
     private var moduleDataFillType: ResFillTypeEnum = ResFillTypeEnum.REFRESH
@@ -81,6 +86,7 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
          */
         @Suppress("UNCHECKED_CAST")
         val vhclzz = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[1] as Class<VH>
+
 
 
         //set the scroll listener, which handle the data loading processor when user scroll the view.
@@ -102,13 +108,15 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
                     module.items = mutableListOf()
                 }
 
-                var loadingLimit: Int = max;
+                /*
+                var loadingLimit: Int = max
 
                 when{
-                    max<300-> loadingLimit = Math.ceil(max*0.2).toInt()
+                    max<300-> loadingLimit = 0
                     max<50000-> loadingLimit = Math.ceil(max*0.8).toInt()
                     module.items.size>3 -> loadingLimit = max/module.items.size*(module.items.size-2)
                 }
+                */
 
                 //calculate the max value of the data.
                 //when total is 0 -> max page number is 1
@@ -123,25 +131,30 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
 
                     //offset is the position of scrolling.
                     if (offset == 0) {
-                        //drop from the begining.
-                        module.pageIndex = 1
-                        moduleDataFillType = ResFillTypeEnum.REFRESH
-                        presenter.refresh()
-                    } else if (offset >= loadingLimit && !loading) {
                         //scrolling to the end.
                         val pageIndex = module.pageIndex + 1
-                        Log.v("console", "max: page_index=$pageIndex max_page_number=$maxPageNumber")
                         if (pageIndex <= maxPageNumber) {
                             module.pageIndex = pageIndex
-                            moduleDataFillType = ResFillTypeEnum.APPENDING
+                            moduleDataFillType = ResFillTypeEnum.INSERT_BEFORE
                             presenter.refresh()
                         }
+
+
+                    } else if (offset >= max && !loading) {
+
+                        //drop from the begining.
+                        //module.pageIndex = 1
+                        //moduleDataFillType = ResFillTypeEnum.REFRESH
+                        //presenter.refresh()
+
                     }
                 }
 
             }
 
         })
+
+        // The constructor is not end.
 
         @Suppress("UNCHECKED_CAST")
         when (orientation) {
@@ -169,7 +182,7 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
                     Consumer { module -> refreshPagination(module) }) as AbstractRecyclerViewPresenter<T, RecyclerViewHolder, VH>
         }
 
-        //presenter.refresh() //load the data immediate when the data loader be created.
+        presenter.refresh() //load the data immediate when the data loader be created.
 
         /*
          * The end of constructor.
@@ -178,56 +191,120 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
 
 
     /**
-     * This property is a function.
+     * This property is a function which would execute when loading data.
+     *
+     * There has two mode for loading, [ResFillTypeEnum.REFRESH] and [ResFillTypeEnum.APPENDING].
+     * When the loader's [moduleDataFillType] is [ResFillTypeEnum.REFRESH], the data module's item would be
+     * the original result. This mode's processor is like a web application. If the user turn pages,
+     * the current page display latest result.
+     * When the loader's [moduleDataFillType] is [ResFillTypeEnum.APPENDING], the module's item
+     * would be appended by the latest result. It like the flow-module.
+     *
      */
-    var loadDataAndFillRes: ((DefaultPaginationModule<T>?, Consumer<DefaultPaginationModule<T>>) -> Unit)? = { cm: DefaultPaginationModule<T>?, cb: Consumer<DefaultPaginationModule<T>> ->
-        updateLoadingStatus(true)
+    var loadDataAndFillRes: ((DefaultPaginationModule<T>?, Consumer<DefaultPaginationModule<T>>) -> Unit)? = {
+        cm: DefaultPaginationModule<T>?,
+        cb: Consumer<DefaultPaginationModule<T>> ->
+        // The argument cb is defined in GeneralPresetner::refresh by default.
+        // And it function is invoke function [refreshPagination] in this type.
+
+        updateLoadingStatus(true)  //When loading begin, set the loading status to disable others
+
         var module = this.presenter.module
+
+        if (module == null) {
+            //set the default value when first loading.
+            module = DefaultPaginationModule()
+            module.items = mutableListOf()
+            presenter.updateModule(module)
+        }
+
 
         when (this.moduleDataFillType) {
             ResFillTypeEnum.REFRESH -> {
+
                 loadData(cm, Consumer { newModule ->
-                    if (module == null) {
-                        module = DefaultPaginationModule()
-                        module.items = mutableListOf()
-                        presenter.updateModule(module)
-                    }
-                    module.items.clear()
-                    module.items.addAll(newModule.items)
+                    // refersh data
+                    module.items.clear() //clear current data.
+
+                    newModule.items.reverse()
+                    module.items.addAll(newModule.items) //update data as latest result.
+
                     module.pageIndex = newModule.pageIndex
                     module.pageSize = newModule.pageSize
                     module.total = newModule.total
 
-                    UiThreadUtils.runInUiThread {
+                    UiThreadUtils.runInUiThread { //updating views must run in the UI thread.
                         this.presenter.adapter.notifyDataSetChanged()
                         cb.accept(module)
+                        presenter.viewHolder.view.scrollToPosition(newModule.items.size-1)
+                        updateLoadingStatus(false)
                     }
 
-                })// by default, argument cb is defined in GeneralPresetner::refresh.
+                })
             }
             ResFillTypeEnum.APPENDING -> {
 
-                loadData(module, Consumer { newModule ->
-                    val begin = module.items.size
+                loadData(module, Consumer { latestResult ->
+                    val oldMaxIndex = module.items.size // keep current max index
 
-                    newModule.items.forEach { cur ->
+                    latestResult.items.forEach { cur ->
                         module.items.add(cur)
                     }
 
+                    module.pageIndex = latestResult.pageIndex
+                    module.pageSize = latestResult.pageSize
+                    module.total = latestResult.total
+
                     UiThreadUtils.runInUiThread {
-                        this.presenter.adapter.notifyItemRangeInserted(begin, newModule.items.size)
+                        // notify the adapter which be inserted,
+                        // from keeped index and the range was latest result's size.
+                        this.presenter.adapter.notifyItemRangeInserted(oldMaxIndex, latestResult.items.size)
                         cb.accept(module)
+                        updateLoadingStatus(false)
                     }
 
                 })
 
             }
+            ResFillTypeEnum.INSERT_BEFORE -> {
+
+                loadData(module, Consumer { latestResult ->
+
+                    latestResult.items.forEach { cur ->
+                        module.items.add(0, cur)
+                    }
+
+                    module.pageIndex = latestResult.pageIndex
+                    module.pageSize = latestResult.pageSize
+                    module.total = latestResult.total
+
+                    UiThreadUtils.runInUiThread {
+                        // notify the adapter which be inserted,
+                        // from keeped index and the range was latest result's size.
+                        this.presenter.adapter.notifyItemRangeInserted(0, latestResult.items.size)
+                        cb.accept(module)
+                        presenter.viewHolder.view.scrollToPosition(latestResult.items.size-1)
+                        updateLoadingStatus(false)
+                    }
+
+                })
+            }
         }
 
     }
 
+    /**
+     * The lock object for property [loading], please use function [updateLoadingStatus].
+     */
+    private val loadingStatusUpdateLock = Object()
+
+    /**
+     * To update loading status.
+     *
+     * This function would lock [loadingStatusUpdateLock].
+     */
     private fun updateLoadingStatus(value:Boolean){
-        synchronized(this){
+        synchronized(loadingStatusUpdateLock){
             loading = value
         }
     }
@@ -242,7 +319,7 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
      * How to update the pagination infomation.
      */
     protected open fun refreshPagination(module: DefaultPaginationModule<T>?){
-        updateLoadingStatus(false)
+
     }
 
 }

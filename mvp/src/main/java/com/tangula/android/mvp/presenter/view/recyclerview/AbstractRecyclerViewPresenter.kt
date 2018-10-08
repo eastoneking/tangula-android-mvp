@@ -211,16 +211,10 @@ protected constructor(private val orientation: Int,
             val vhf = Supplier<RecyclerViewHolder> {object : RecyclerViewHolder(rvw) {}}
 
             val itemVwFac = BiFunction<View, Int, View> { parent, _ ->
-                try {
                     LayoutInflater.from(context).inflate(resId, parent as ViewGroup, false)
-                }catch(e: java.lang.Exception){
-                    Log.e("console", "this is wrong")
-                    throw e
-                }
             }
             val res = object : AbstractRecyclerViewPresenter<T, RecyclerViewHolder, AbstractRecyclerViewItemHolder<T>>(orientation, vhf, itemVwFac, facItemHolder, BiConsumer { ivh, t -> ivh.bindData(t) }) {
                 override fun loadModule(callbackLoadResultHandler: Consumer<DefaultPaginationModule<T>>) {
-                    Log.v("console", "module hash code:"+module?.hashCode())
                     funcLoadData?.accept(module, callbackLoadResultHandler)
                 }
 
