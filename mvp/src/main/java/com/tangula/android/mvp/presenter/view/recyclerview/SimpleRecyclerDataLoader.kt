@@ -2,7 +2,6 @@ package com.tangula.android.mvp.presenter.view.recyclerview
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import com.tangula.android.mvp.module.DefaultPaginationModule
 import com.tangula.android.utils.UiThreadUtils
 import com.tangula.utils.function.BiConsumer
@@ -201,7 +200,7 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
      * would be appended by the latest result. It like the flow-module.
      *
      */
-    var loadDataAndFillRes: ((DefaultPaginationModule<T>?, Consumer<DefaultPaginationModule<T>>) -> Unit)? = {
+    private var loadDataAndFillRes: ((DefaultPaginationModule<T>?, Consumer<DefaultPaginationModule<T>>) -> Unit)? = {
         cm: DefaultPaginationModule<T>?,
         cb: Consumer<DefaultPaginationModule<T>> ->
         // The argument cb is defined in GeneralPresetner::refresh by default.
