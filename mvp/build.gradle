@@ -40,8 +40,9 @@ configurations.all {
 
 dependencies {
     implementation fileTree(include: ['*.jar', 'aar'], dir: 'libs')
-    implementation 'com.tangula.android:commons:0.0.1-SNAPSHOT@aar'
-    implementation 'com.tangula.android:http:0.0.1-SNAPSHOT@aar'
+
+    implementation "com.github.eastoneking:tangula-android-common:V0.0.1@aar"
+    implementation "com.github.eastoneking:tangula-android-http:V0.0.1@aar"
 
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
@@ -61,9 +62,17 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.7'
     // https://mvnrepository.com/artifact/commons-codec/commons-codec
     implementation 'commons-codec:commons-codec:1.11'
+
+    // for test
+
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "com.android.support.test:runner:$support_test_version"
+    // https://mvnrepository.com/artifact/com.android.support.test/rules
+    androidTestImplementation "com.android.support.test:rules:$support_test_version"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "com.android.support.test.espresso:espresso-contrib:$espresso_version"
+    androidTestImplementation "com.android.support.test.espresso:espresso-web:$espresso_version"
+
 }
 
 def GROUP_ID = "com.tangula.android"

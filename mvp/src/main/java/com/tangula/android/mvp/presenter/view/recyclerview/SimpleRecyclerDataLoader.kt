@@ -2,6 +2,7 @@ package com.tangula.android.mvp.presenter.view.recyclerview
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import com.tangula.android.mvp.module.DefaultPaginationModule
 import com.tangula.android.utils.UiThreadUtils
 import com.tangula.utils.function.BiConsumer
@@ -92,6 +93,8 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
 
+
+
                 super.onScrollStateChanged(recyclerView, newState)
 
                 val offset = recyclerView!!.computeVerticalScrollOffset()
@@ -122,6 +125,7 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
                 //else max page number is total/pageSize, and plus 1 when the total mod pageSize is not zero.
                 val maxPageNumber = module.total / module.pageSize + (if (module.total % module.pageSize > 0) 1 else 0) + (if (module.total == 0) 1 else 0)
 
+                Log.v("console", "scrolling to offset:"+offset+","+newState)
 
                 if (newState == 0) {
                     /*
@@ -242,7 +246,7 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
                 })
             }
             ResFillTypeEnum.APPENDING -> {
-
+                Log.v("console", "appending")
                 loadData(module, Consumer { latestResult ->
                     val oldMaxIndex = module.items.size // keep current max index
 
