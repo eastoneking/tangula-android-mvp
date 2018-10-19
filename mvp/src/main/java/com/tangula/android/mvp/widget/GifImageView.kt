@@ -132,7 +132,7 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
 
     private fun drawMovie(canvas: Canvas?) {
         if (movie != null) {
-            canvas?.save(Canvas.ALL_SAVE_FLAG) //保存变换矩阵
+            canvas?.save() //保存变换矩阵
             canvas?.scale(gifScaleX, gifScaleY)
             updateMovieTime()
             movie?.draw(canvas, 0f, 0f)

@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
 
     defaultConfig {
         applicationId "com.tangula.android.mvp.testapp"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
@@ -32,8 +32,8 @@ configurations.all {
 dependencies {
     implementation fileTree(include: ['*.jar', "*.aar"], dir: 'libs')
 
-    implementation "com.github.eastoneking:tangula-android-commons:0.0.5@aar"
-    implementation "com.github.eastoneking:tangula-android-http:0.0.5@aar"
+    implementation "com.github.eastoneking:tangula-android-commons:$tangula_version@aar"
+    implementation "com.github.eastoneking:tangula-android-http:$tangula_version@aar"
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation 'org.apache.commons:commons-lang3:3.7'

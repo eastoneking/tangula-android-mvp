@@ -91,13 +91,13 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
 
         //set the scroll listener, which handle the data loading processor when user scroll the view.
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
 
 
 
                 super.onScrollStateChanged(recyclerView, newState)
 
-                val offset = recyclerView!!.computeVerticalScrollOffset()
+                val offset = recyclerView.computeVerticalScrollOffset()
                 val max = recyclerView.computeVerticalScrollRange() - recyclerView.computeVerticalScrollExtent()
 
                 var module = presenter.module
