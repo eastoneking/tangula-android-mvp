@@ -32,8 +32,8 @@ configurations.all {
 dependencies {
     implementation fileTree(include: ['*.jar', "*.aar"], dir: 'libs')
 
-    implementation "com.github.eastoneking:tangula-android-commons:$tangula_version@aar"
-    implementation "com.github.eastoneking:tangula-android-http:$tangula_version@aar"
+    implementation "com.github.eastoneking:tangula-android-commons:$tangula_version+@aar"
+    implementation "com.github.eastoneking:tangula-android-http:$tangula_version+@aar"
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation 'org.apache.commons:commons-lang3:3.7'
