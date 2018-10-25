@@ -4,7 +4,7 @@ import android.widget.ImageView;
 
 import com.tangula.android.mvp.presenter.Presenter;
 
-
+@SuppressWarnings("unused")
 public class ImageViewHolder implements Presenter.ViewHolder{
 
     private ImageView view;

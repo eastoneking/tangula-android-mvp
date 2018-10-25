@@ -8,6 +8,8 @@ import com.tangula.utils.function.BiConsumer;
 import com.tangula.utils.function.Consumer;
 import com.tangula.utils.function.Supplier;
 
+
+@SuppressWarnings({"unused","WeakerAccess"})
 public class OnClickPresenter<V extends View, VH extends OnClickHolder<V>, M extends Module> extends GeneralPresenter<VH, M> {
 
     private final Supplier<M> moduleFactory;

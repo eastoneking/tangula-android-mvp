@@ -20,6 +20,7 @@ public interface Presenter <V extends Presenter.ViewHolder, M extends Module>{
 
     abstract class AbstractViewHolder<V extends View> implements ViewHolder{
 
+        @SuppressWarnings("unused")
         protected abstract void recognizeView(V view);
 
     }

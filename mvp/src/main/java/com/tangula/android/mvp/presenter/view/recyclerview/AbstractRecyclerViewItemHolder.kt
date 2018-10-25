@@ -1,10 +1,8 @@
 package com.tangula.android.mvp.presenter.view.recyclerview
 
 import android.content.Context
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.view.ViewParent
 
 /**
  * RecyclerView中每个元素的ViewHolder抽象类.

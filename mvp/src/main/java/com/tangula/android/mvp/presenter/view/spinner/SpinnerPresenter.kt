@@ -10,7 +10,7 @@ import com.tangula.android.mvp.presenter.view.singleview.SingleViewHolder
 import com.tangula.utils.function.Consumer
 import com.tangula.utils.function.Supplier
 import java.util.*
-
+@Suppress("UNUSED", "MemberVisibilityCanBePrivate")
 class SpinnerPresenter<T>(vhFac: Supplier<SingleViewHolder<Spinner>>?, itemResId: Int, val loadedItemsNotifyFunc: Consumer<Consumer<List<T>>>, val onSelected: Consumer<T>) : GeneralPresenter<SingleViewHolder<Spinner>, SpinnerItemsModule<T>>(vhFac), AdapterView.OnItemSelectedListener {
 
 

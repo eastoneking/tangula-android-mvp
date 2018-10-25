@@ -45,6 +45,7 @@ class GifDataFactory {
 /**
  * Gif图片组件.
  */
+@Suppress( "MemberVisibilityCanBePrivate")
 open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(context, attrs) {
     /**
      *  gif flag.
@@ -100,6 +101,7 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
     /**
      * the movie object which contains gif pictures.
      */
+    @Suppress("DEPRECATION")
     private var movie: Movie? = null
 
     /**
@@ -144,6 +146,7 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
      * 初始化Movie.
      * <p>View被设置为isGif之后,第一次渲染(draw)的时候,还没有将GIF解析为Movie对象.这个方法用于在这个时候提供初始化功能.</p>
      */
+    @Suppress("DEPRECATION")
     private fun initMovie() {
         calcMovieScale()
         movie = Movie.decodeStream(ByteArrayInputStream(gifData))
@@ -196,19 +199,19 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
      * 更新Movie的播放时长.
      */
     private fun updateMovieTime() {
-        val movie_duration = movie?.duration() ?: 1
+        val movieDuration = movie?.duration() ?: 1
 
-        if (movie_duration < gifFrameDuration) {
+        if (movieDuration < gifFrameDuration) {
             //按照一秒30帧计算，一帧最少33.3...毫秒，如果低于这个间隔，人眼无法识别
             //所以这个时候就不耗费时间算第几帧了，直接显示第一帧的图片
             movie?.setTime(0)
         } else {
-            val cur_tm = System.currentTimeMillis()
+            val curTm = System.currentTimeMillis()
             if (startTm < 0) {
-                startTm = cur_tm
+                startTm = curTm
             }
             //当前播放时间。经过时长与movie时长取模，保证播放时间不超过movie时长
-            val duration = (cur_tm - startTm) % movie_duration
+            val duration = (curTm - startTm) % movieDuration
             movie?.setTime(duration.toInt())
         }
     }
@@ -217,7 +220,9 @@ open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(conte
         /*
          * view不显示时，停掉后台刷新的线程
          */
-        super.onVisibilityChanged(changedView, visibility)
+        changedView?.also {
+            super.onVisibilityChanged(changedView, visibility)
+        }
         if ((visibility and (View.GONE or View.INVISIBLE)) > 0) {
             if (isGif) {
                 //清理当前的movie和线程

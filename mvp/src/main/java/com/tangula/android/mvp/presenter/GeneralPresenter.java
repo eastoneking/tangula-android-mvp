@@ -1,10 +1,8 @@
 package com.tangula.android.mvp.presenter;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import com.tangula.android.mvp.module.Module;
-import com.tangula.android.utils.ApplicationUtils;
 import com.tangula.android.utils.UiThreadUtils;
 import com.tangula.utils.function.Consumer;
 import com.tangula.utils.function.Supplier;
@@ -34,6 +32,7 @@ public abstract class GeneralPresenter<V extends Presenter.ViewHolder, M extends
         return mViewHolder;
     }
 
+    @SuppressWarnings("unused")
     protected void setViewHolder(V viewHolder) {
         this.mViewHolder = viewHolder;
     }

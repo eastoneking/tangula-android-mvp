@@ -7,6 +7,7 @@ import com.tangula.utils.function.BiFunction
 import com.tangula.utils.function.Consumer
 import com.tangula.utils.function.Supplier
 
+@Suppress("unused")
 class LongClickPresenter<V: View, M:Module>(vhFac: Supplier<LongClickHolder<V>>?, val moduleFac:Supplier<M?>, val onClick:BiFunction<V, M, Boolean>) : GeneralPresenter<LongClickHolder<V>, M>(vhFac) {
 
     constructor(view:V, mdl:M?, onClick:BiFunction<V, M, Boolean>): this(Supplier { LongClickHolder<V>(view)}, Supplier{mdl}, onClick)

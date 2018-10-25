@@ -6,10 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Build.VERSION
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory
-import android.support.v7.widget.DrawableUtils
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.widget.ImageView
 import com.jakewharton.picasso.OkHttp3Downloader
 import com.squareup.picasso.Callback

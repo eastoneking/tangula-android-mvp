@@ -125,7 +125,7 @@ protected constructor(content: Context, recyclerView: RecyclerView, resId: Int, 
                 //else max page number is total/pageSize, and plus 1 when the total mod pageSize is not zero.
                 val maxPageNumber = module.total / module.pageSize + (if (module.total % module.pageSize > 0) 1 else 0) + (if (module.total == 0) 1 else 0)
 
-                Log.v("console", "scrolling to offset:"+offset+","+newState)
+                Log.v("console", "scrolling to offset:$offset,$newState")
 
                 if (newState == 0) {
                     /*

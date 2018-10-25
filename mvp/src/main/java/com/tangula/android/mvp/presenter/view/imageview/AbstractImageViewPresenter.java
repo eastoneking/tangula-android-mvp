@@ -9,6 +9,7 @@ import com.tangula.android.mvp.widget.RemoteImage;
 import com.tangula.android.mvp.widget.RemoteImageView;
 import com.tangula.utils.function.Supplier;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public abstract class AbstractImageViewPresenter<M extends Module> extends GeneralPresenter<ImageViewHolder,M>{
 
     protected AbstractImageViewPresenter(Supplier<ImageViewHolder> vhFac) {

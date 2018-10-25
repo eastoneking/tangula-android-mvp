@@ -2,6 +2,7 @@ package com.tangula.android.mvp.module;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class DefaultPaginationBody<T> implements PaginationModule<T> {
 
     private int pageIndex;

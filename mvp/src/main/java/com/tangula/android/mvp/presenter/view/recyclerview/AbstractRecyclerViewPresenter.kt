@@ -7,14 +7,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import com.tangula.android.mvp.module.DefaultPaginationModule
 import com.tangula.android.mvp.presenter.GeneralPresenter
-import com.tangula.utils.function.BiConsumer
-import com.tangula.utils.function.BiFunction
-import com.tangula.utils.function.Consumer
+import com.tangula.utils.function.*
 import com.tangula.utils.function.Function
-import com.tangula.utils.function.Supplier
 import org.jetbrains.annotations.NotNull
 
 /**
@@ -98,6 +94,7 @@ protected constructor(private val orientation: Int,
     /**
      * 设置RecyclerView的布局.
      */
+    @Suppress( "MemberVisibilityCanBePrivate")
     protected fun updateRecyclerViewLayout() {
         val vh = this.viewHolder
         val rv = vh.view
@@ -130,7 +127,7 @@ protected constructor(private val orientation: Int,
             var res: AbstractRecyclerViewItemHolder<Any>? = null
             for (cs in clazz.constructors) {
                 val types = cs.parameterTypes
-                if (types != null && types.size == 1) {
+                if (types.isNotEmpty() && types.size == 1) {
                     val type = types[0]
                     if (type.isInstance(view)) {
                         try {
@@ -160,6 +157,7 @@ protected constructor(private val orientation: Int,
          * @return 返回值是个[AbstractRecyclerViewItemHolder]类的实例.
          */
         @JvmStatic
+        @Suppress("unchecked_cast")
         fun <T> displaySimpleHorizontalRecyclerView(
                 context: Context,
                 @NotNull rvw: RecyclerView,
@@ -185,6 +183,7 @@ protected constructor(private val orientation: Int,
          * @return 返回值是个[AbstractRecyclerViewItemHolder]类的实例.
         </T> */
         @JvmStatic
+        @Suppress("unchecked_cast")
         fun <T> displaySimpleRecyclerView(
                 context: Context,
                 rvw: RecyclerView,
@@ -213,7 +212,8 @@ protected constructor(private val orientation: Int,
             val itemVwFac = BiFunction<View, Int, View> { parent, _ ->
                     LayoutInflater.from(context).inflate(resId, parent as ViewGroup, false)
             }
-            val res = object : AbstractRecyclerViewPresenter<T, RecyclerViewHolder, AbstractRecyclerViewItemHolder<T>>(orientation, vhf, itemVwFac, facItemHolder, BiConsumer { ivh, t -> ivh.bindData(t) }) {
+
+            return object : AbstractRecyclerViewPresenter<T, RecyclerViewHolder, AbstractRecyclerViewItemHolder<T>>(orientation, vhf, itemVwFac, facItemHolder, BiConsumer { ivh, t -> ivh.bindData(t) }) {
                 override fun loadModule(callbackLoadResultHandler: Consumer<DefaultPaginationModule<T>>) {
                     funcLoadData?.accept(module, callbackLoadResultHandler)
                 }
@@ -227,8 +227,6 @@ protected constructor(private val orientation: Int,
                     }
                 }
             }
-
-            return res
 
         }
     }

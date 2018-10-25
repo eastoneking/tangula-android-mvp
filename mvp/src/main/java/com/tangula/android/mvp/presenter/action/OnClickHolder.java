@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.tangula.android.mvp.presenter.Presenter;
 
+@SuppressWarnings("WeakerAccess")
 public class OnClickHolder<T extends View> implements Presenter.ViewHolder {
 
     private T view;
