@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TangulaAndroidMvp</string>
+
+
+    <string name="tag_touch_listners"></string>
+    <string name="tag_tgl_touch_module"></string>
 </resources>

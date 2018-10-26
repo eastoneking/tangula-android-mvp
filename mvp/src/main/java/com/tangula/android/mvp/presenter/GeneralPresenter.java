@@ -3,6 +3,7 @@ package com.tangula.android.mvp.presenter;
 import android.annotation.SuppressLint;
 
 import com.tangula.android.mvp.module.Module;
+import com.tangula.android.utils.TaskUtils;
 import com.tangula.android.utils.UiThreadUtils;
 import com.tangula.utils.function.Consumer;
 import com.tangula.utils.function.Supplier;
@@ -52,7 +53,7 @@ public abstract class GeneralPresenter<V extends Presenter.ViewHolder, M extends
     @SuppressLint("StaticFieldLeak")
     public void refresh() {
         //在后台线程执行加载数据过程
-        UiThreadUtils.runInBackground(
+        TaskUtils.runInBackground(
                 new Runnable() {
                     @Override
                     public void run() {
@@ -62,7 +63,7 @@ public abstract class GeneralPresenter<V extends Presenter.ViewHolder, M extends
                                     public void accept(M m) {
                                         setModule(m);
                                         //在UI线程中执行刷新页面的操作
-                                        UiThreadUtils.runInUiThread(new Runnable() {
+                                        TaskUtils.runInUiThread(new Runnable() {
                                             @Override
                                             public void run() {
                                                 onRefresh();

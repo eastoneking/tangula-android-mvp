@@ -24,6 +24,4 @@ class LongClickPresenter<V: View, M:Module>(vhFac: Supplier<LongClickHolder<V>>?
         }
     }
 
-
-
 }

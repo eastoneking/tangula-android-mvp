@@ -1,6 +1,6 @@
 package com.tangula.android.mvp.activity;
 
-import android.support.v7.app.AppCompatActivity;
+import com.tangula.android.base.TglBasicActivity;
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends TglBasicActivity {
 }
