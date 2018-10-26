@@ -1,7 +1,6 @@
 package com.tangula.android.mvp.presenter
 
 import android.util.Log
-import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import com.tangula.android.mvp.R
@@ -52,7 +51,9 @@ fun <V : View> bindTouch(view: V, onTouch: View.OnTouchListener) {
 }
 
 
-
+fun View.tglBindTouch(onTouch: View.OnTouchListener){
+    bindTouch(this, onTouch)
+}
 
 
 

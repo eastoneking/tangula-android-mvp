@@ -18,21 +18,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        bindClick(vw_act_main_gif) {
+        vw_act_main_gif.tglBindClick {
             startActivity(Intent(this, GifTestActivity::class.java))
         }
 
-        bindClick(vw_act_main_recyclerview) {
+        vw_act_main_recyclerview.tglBindClick {
             startActivity(Intent(this, RecyclerViewTestActivity::class.java))
         }
 
-        bindClick(vw_act_main_click) {
+        vw_act_main_click.tglBindClick {
             Log.v("console", "click")
         }
 
 
-        bindLongClick(vw_act_main_click) {
+        vw_act_main_click.tglBindLongClick {
             Log.v("console", "long click")
+            false
         }
 
         /*
@@ -42,22 +43,22 @@ class MainActivity : AppCompatActivity() {
         })
         */
 
-        bindFlingLeft(vw_act_main_text)  { _,_,dx,dy ->
+        vw_act_main_text.tglBindFlingLeft  { _,_,_,_ ->
             Log.v("console", "fling left")
             false
         }
 
-        bindFlingRight(vw_act_main_text)  { _,_,dx,dy ->
+        vw_act_main_text.tglBindFlingRight  { _,_,_,_ ->
             Log.v("console", "fling right")
             false
         }
 
-        bindFlingUp(vw_act_main_text)  { _,_,dx,dy ->
+        vw_act_main_text.tglBindFlingUp  { _,_,_,_ ->
             Log.v("console", "fling up")
             false
         }
 
-        bindFlingDown(vw_act_main_text)  { _,_,dx,dy ->
+        vw_act_main_text.tglBindFlingDown  { _,_,_,_ ->
             Log.v("console", "fling down")
             false
         }
