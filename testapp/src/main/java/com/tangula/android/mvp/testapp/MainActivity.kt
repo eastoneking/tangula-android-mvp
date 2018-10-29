@@ -4,11 +4,10 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
-import android.view.View
 import com.tangula.android.mvp.presenter.*
 import com.tangula.android.mvp.testapp.presenter.view.recyclerview.RecyclerViewTestActivity
 import com.tangula.android.mvp.testapp.widget.gifimageview.GifTestActivity
+import com.tangula.android.mvp.testapp.widget.spinner.SpinnerTestActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -34,6 +33,11 @@ class MainActivity : AppCompatActivity() {
         vw_act_main_click.tglBindLongClick {
             Log.v("console", "long click")
             false
+        }
+
+        vw_act_main_spinner.tglBindClick {
+            //ActivityUtils.startActivity(SpinnerTestActivity::class)
+            this.startActivity(Intent(this, SpinnerTestActivity::class.java))
         }
 
         /*

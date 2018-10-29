@@ -11,7 +11,7 @@
         android:id="@+id/vw_act_main_gif"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:text="GIF"
         android:textAllCaps="false"
@@ -22,9 +22,9 @@
         android:id="@+id/vw_act_main_recyclerview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:text="RecyclerView"
+        android:text="Recycler"
         android:textAllCaps="false"
         app:layout_constraintStart_toEndOf="@+id/vw_act_main_gif"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:text="Click"
+        app:layout_constraintEnd_toStartOf="@+id/vw_act_main_spinner"
         app:layout_constraintStart_toEndOf="@+id/vw_act_main_recyclerview"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,10 +54,21 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:background="@color/colorAccent"
-        android:text="TextView"
+        android:text="Touch and Fling"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/vw_act_main_recyclerview" />
+
+    <Button
+        android:id="@+id/vw_act_main_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

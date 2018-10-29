@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.support.annotation.DrawableRes
 import android.support.annotation.RawRes
+import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
 import android.view.View
 import android.widget.ImageView
@@ -46,7 +47,7 @@ class GifDataFactory {
  * Gif图片组件.
  */
 @Suppress( "MemberVisibilityCanBePrivate")
-open class GifImageView(context: Context, attrs: AttributeSet) : ImageView(context, attrs) {
+open class GifImageView(context: Context, attrs: AttributeSet) : AppCompatImageView(context, attrs) {
     /**
      *  gif flag.
      */

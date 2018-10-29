@@ -1,18 +1,12 @@
 package com.tangula.android.mvp.testapp.presenter.view.recyclerview
 
-import android.content.Context
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.RecyclerView
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.TextView
-import com.tangula.android.mvp.module.DefaultPaginationModule
 import com.tangula.android.mvp.module.Module
 import com.tangula.android.mvp.presenter.view.recyclerview.AbstractRecyclerViewItemHolder
-import com.tangula.android.mvp.presenter.view.recyclerview.SimpleRecyclerDataLoader
 import com.tangula.android.mvp.testapp.R
-import com.tangula.utils.function.Consumer
-import kotlinx.android.synthetic.main.activity_recycler_view_test.*
 
 
 data class TestRvm(var text: String?) : Module
@@ -29,7 +23,7 @@ class TestRvh(vw: View) : AbstractRecyclerViewItemHolder<TestRvm>(vw) {
         textView.text = item.text
     }
 }
-
+/*
 class TestRdl(ctx: Context, rvw: RecyclerView, resId: Int, ori: OrientationEnum)
     : SimpleRecyclerDataLoader<TestRvm, TestRvh>(ctx, rvw, resId, ori) {
 
@@ -60,14 +54,14 @@ class TestRdl(ctx: Context, rvw: RecyclerView, resId: Int, ori: OrientationEnum)
         this.presenter.refresh()
     }
 }
-
+*/
 
 class RecyclerViewTestActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recycler_view_test)
-        TestRdl(this, vw_act_recycler_view_test_recycler, R.layout.item_recycler_view_test, SimpleRecyclerDataLoader.OrientationEnum.VERTICAL).refresh()
+        //TestRdl(this, vw_act_recycler_view_test_recycler, R.layout.item_recycler_view_test, SimpleRecyclerDataLoader.OrientationEnum.VERTICAL).refresh()
     }
 
 }
